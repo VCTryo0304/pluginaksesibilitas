@@ -65,3 +65,21 @@ APR_CONTRAST.toggle();
 APR_TTS.start();
 APR_ZOOM.in();
 APR_MAGNIFIER.toggle();
+
+Edit:
+
+aksesibilitas.css
+
+Contoh:
+
+.high-contrast { ... }
+.monochrome { ... }
+⚠️ Troubleshooting
+Problem	Solution
+Tab tidak muncul	Cek path script
+CDN tidak update	Tambahkan ?v=1
+Tidak jalan di local	Gunakan relative path
+
+
+
+Aryo Pradipta – Telkom University (IT)

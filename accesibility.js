@@ -14,9 +14,7 @@
     };
     window.APR_STATE = STATE;
 
-    const BASE = "https://cdn.jsdelivr.net/gh/VCTryo0304/pluginaksesibilitas@1.0.2/accesibility.js";
-
-    const BASE = "https://cdn.jsdelivr.net/gh/VCTryo0304/pluginaksesibilitas@1.0.2/accesibility.js";
+    
 
     const BASE = new URL('.', document.currentScript.src).href;
 

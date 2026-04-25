@@ -14,9 +14,9 @@
     };
     window.APR_STATE = STATE;
 
-    //const BASE = "https://cdn.jsdelivr.net/gh/VCTryo0304/pluginaksesibilitas@1.0.0/";
+    //const BASE = "https://cdn.jsdelivr.net/gh/VCTryo0304/pluginaksesibilitas@1.0.1/accesibility.js";
 
-    //const BASE = "https://cdn.jsdelivr.net/gh/VCTryo0304/pluginaksesibilitas@1.0.0/";
+    //const BASE = "https://cdn.jsdelivr.net/gh/VCTryo0304/pluginaksesibilitas@1.0.1/accesibility.js;
 
     const BASE = new URL('.', document.currentScript.src).href;
 
@@ -84,8 +84,16 @@
 
         document.addEventListener("click", function (e) {
 
+            //const btn = e.target.closest("button");
+            //if (!btn || !btn.closest("#accessibilityPanel")) return;
+
             const btn = e.target.closest("button");
-            if (!btn || !btn.closest("#accessibilityPanel")) return;
+            if (!btn) return;
+
+                console.log("CLICK:", btn.dataset);
+
+                console.log("BTN:", btn);
+                console.log("DATASET:", btn.dataset);
 
             // ===== PANEL TOGGLE (FIX CLOSE BUTTON) =====
             if (btn.dataset.aprPanelToggle !== undefined) {
@@ -177,10 +185,16 @@
             }
 
             // ===== VOICE =====
-            if (btn.dataset.aprVoice !== undefined) {
-                window.APR_VOICE?.start();
-                return;
-            }
+            //if (btn.dataset.aprVoice !== undefined) {
+            //    window.APR_VOICE?.start();
+            //    return;
+            //}
+
+            //if (btn.hasAttribute("data-apr-voice")) {
+            //    console.log("VOICE CLICKED");
+            //    window.APR_VOICE?.start();
+            //    return;
+            //}
 
             if (btn.dataset.aprVoiceStop !== undefined) {
                 window.APR_VOICE?.stop();
@@ -363,6 +377,15 @@
         `;
 
         document.body.appendChild(panel);
+
+        //  FIX VOICE (DIRECT USER GESTURE)
+        const voiceBtn = panel.querySelector("[data-apr-voice]");
+        if (voiceBtn) {
+            voiceBtn.addEventListener("click", function () {
+                console.log("VOICE DIRECT CLICK");
+                window.APR_VOICE?.start();
+            });
+        }
 
         const tab = document.createElement("div");
         tab.id = "accessibilityTab";

@@ -40,38 +40,104 @@
 
     const VOICE = {
 
-        start() {
-            if (!('webkitSpeechRecognition' in window)) return;
+        //start() {
+        //    if (!('webkitSpeechRecognition' in window)) return;
 
+        //    recognition = new webkitSpeechRecognition();
+        //    recognition.lang = "id-ID";
+        //    recognition.continuous = true;
+
+        //    recognition.onresult = (event) => {
+        //        const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
+
+        //        if (transcript.includes("scroll bawah")) {
+        //            window.scrollBy({ top: 500, behavior: 'smooth' });
+        //        }
+
+        //        if (transcript.includes("scroll atas")) {
+        //            window.scrollBy({ top: -500, behavior: 'smooth' });
+        //        }
+
+        //        if (transcript.includes("baca")) {
+        //            TTS.start();
+        //        }
+
+        //        if (transcript.includes("stop")) {
+        //            TTS.stop();
+        //        }
+        //    };
+
+        //    recognition.start();
+        //},
+
+        start() {
+            console.log("VOICE START TRIGGERED");
+        
+            // support check
+            if (!('webkitSpeechRecognition' in window)) {
+                console.log("❌ SpeechRecognition tidak support");
+                return;
+            }
+        
+            // stop sebelumnya (biar tidak double)
+            if (recognition) {
+                recognition.stop();
+                recognition = null;
+            }
+        
             recognition = new webkitSpeechRecognition();
             recognition.lang = "id-ID";
             recognition.continuous = true;
-
+            recognition.interimResults = true;
+        
+            recognition.onstart = () => {
+                console.log("🎤 Voice STARTED");
+            };
+        
+            recognition.onerror = (e) => {
+                console.log("❌ Voice ERROR:", e.error);
+            };
+        
+            recognition.onend = () => {
+                console.log("🛑 Voice STOPPED");
+            };
+        
             recognition.onresult = (event) => {
-                const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
-
+                const transcript =
+                    event.results[event.results.length - 1][0].transcript.toLowerCase();
+        
+                console.log("🗣️ Heard:", transcript);
+        
                 if (transcript.includes("scroll bawah")) {
                     window.scrollBy({ top: 500, behavior: 'smooth' });
                 }
-
+        
                 if (transcript.includes("scroll atas")) {
                     window.scrollBy({ top: -500, behavior: 'smooth' });
                 }
-
+        
                 if (transcript.includes("baca")) {
-                    TTS.start();
+                    window.APR_TTS.start();
                 }
-
+        
                 if (transcript.includes("stop")) {
-                    TTS.stop();
+                    window.APR_TTS.stop();
                 }
             };
-
+        
             recognition.start();
         },
 
+        //stop() {
+        //    if (recognition) recognition.stop();
+        //}
+
         stop() {
-            if (recognition) recognition.stop();
+            if (recognition) {
+                recognition.stop();
+                recognition = null;
+                console.log("🛑 Voice manually stopped");
+            }
         }
     };
 
@@ -159,7 +225,7 @@
             lens.innerHTML = element.outerHTML;
 
             const inner = lens.firstChild;
-            if (!inner) return; // 🔥 FIX
+            if (!inner) return; //  FIX
 
             inner.style.transform = "scale(2)";
             inner.style.transformOrigin = "center";

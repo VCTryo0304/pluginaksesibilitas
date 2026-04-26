@@ -74,8 +74,13 @@
             console.log("VOICE START TRIGGERED");
         
             // support check
+            //if (!('webkitSpeechRecognition' in window)) {
+            //    console.log("❌ SpeechRecognition tidak support");
+            //    return;
+            //}
+
             if (!('webkitSpeechRecognition' in window)) {
-                console.log("❌ SpeechRecognition tidak support");
+                alert("Voice tidak didukung di browser ini");
                 return;
             }
         
@@ -107,6 +112,30 @@
                     event.results[event.results.length - 1][0].transcript.toLowerCase();
         
                 console.log("🗣️ Heard:", transcript);
+
+                // ================= SEARCH =================
+                if (transcript.includes("cari")) {
+                    const keyword = transcript.replace("cari", "").trim();
+
+                    console.log("🔍 Cari:", keyword);
+
+                    const input = document.getElementById("searchInput");
+                    if (input) {
+                        input.value = keyword;
+
+                        // trigger event search
+                        input.dispatchEvent(new Event("input"));
+                    }
+
+                    // feedback suara
+                    const msg = new SpeechSynthesisUtterance("Mencari " + keyword);
+                    msg.lang = "id-ID";
+                    speechSynthesis.speak(msg);
+
+                    return;
+                }
+
+                // ================= FITUR LAMA =================
         
                 if (transcript.includes("scroll bawah")) {
                     window.scrollBy({ top: 500, behavior: 'smooth' });
@@ -225,7 +254,7 @@
             lens.innerHTML = element.outerHTML;
 
             const inner = lens.firstChild;
-            if (!inner) return; //  FIX
+            if (!inner) return; // 🔥 FIX
 
             inner.style.transform = "scale(2)";
             inner.style.transformOrigin = "center";
